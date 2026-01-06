@@ -1,3 +1,4 @@
+import 'package:dsw59547/utils/app_images.dart';
 import 'package:flutter/material.dart';
 
 import '../register/register_view.dart';
@@ -13,6 +14,7 @@ class LoginView extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
+              Image.asset(AppImages.logo),
               ElevatedButton(
                 child: const Text('Open route'),
                 onPressed: () {
