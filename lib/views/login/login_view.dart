@@ -14,7 +14,9 @@ class LoginView extends StatelessWidget {
           width: double.infinity,
           child: Column(
             children: [
+              SizedBox(height: 62),
               Image.asset(AppImages.logo),
+              SizedBox(height: 21),
               ElevatedButton(
                 child: const Text('Open route'),
                 onPressed: () {

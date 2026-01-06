@@ -27,3 +27,5 @@ Thumbs.db
 *.iml
 
 .metadata
+
+pubspec.lock
