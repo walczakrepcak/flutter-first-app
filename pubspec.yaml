@@ -7,10 +7,10 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
-  very_good_analysis: 10.0.0
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  very_good_analysis: 10.0.0
 
 dev_dependencies:
   flutter_test:
