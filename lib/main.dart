@@ -11,7 +11,7 @@ void main() async{
 
 
   runApp(
-    const MaterialApp(
+    MaterialApp(
       title: 'Navigation Basics',
       debugShowCheckedModeBanner: false,
       // Jeżeli zalogowany, idź do Home (Register), jeśli nie, to idź do Login
