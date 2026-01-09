@@ -41,7 +41,16 @@ class _LoginViewState extends State<LoginView> {
                     TextFormField(
                       controller: _emailController,
                       decoration: const InputDecoration(hintText: 'Email'),
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            !value.contains('@')) {
+                          return 'Invalid email';
+                        }
+                        return null;
+                      },
                     ),
+
                     SizedBox(height: 40),
 
                     // Pole do wpisywania hasla
@@ -54,14 +63,14 @@ class _LoginViewState extends State<LoginView> {
                     ElevatedButton(
                       child: const Text('Sign in'),
                       onPressed: () {
-                        print("Wpisany email: ${_emailController.text}");
-                        // dodać walidację
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (context) => const RegisterView(),
-                          ),
-                        );
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterView(),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],
