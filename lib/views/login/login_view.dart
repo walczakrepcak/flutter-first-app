@@ -1,3 +1,4 @@
+import 'package:dsw59547/services/shared_prefs_service.dart';
 import 'package:dsw59547/utils/app_colors.dart';
 import 'package:dsw59547/utils/app_images.dart';
 import 'package:dsw59547/utils/app_texts.dart';
@@ -14,11 +15,18 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  @override
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  @override
+  void dispose() {
+    _emailController.dispose()
+    _passwordController.dispose()
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -64,14 +72,19 @@ class _LoginViewState extends State<LoginView> {
                     // Przycisk logowania i jego funkcje
                     ElevatedButton(
                       child: const Text('Sign in'),
-                      onPressed: () {
+                      onPressed: () async {
                         // Wywolanie walidacji formularza za pomoca klucza
                         if (_formKey.currentState!.validate()) {
                           // Sprawdzenie czy dane są zgodne z tymi przypisanymi
                           if (_emailController.text == 'test@dsw.pl' &&
                               _passwordController.text == '12345') {
                             // Jeżeli tak, to przejscie do Home (tymczasowo RegisterView)
-                            Navigator.push(
+                            // Zapisanie sesji przed przejściem dalej
+                            await SharedPrefsService.setLoggedIn(true);
+
+                            if (!mounted) return;
+
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const RegisterView(),
