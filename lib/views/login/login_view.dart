@@ -15,6 +15,10 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   @override
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -23,28 +27,45 @@ class _LoginViewState extends State<LoginView> {
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  SizedBox(height: 62),
-                  Image.asset(AppImages.logo),
-                  SizedBox(height: 21),
-                  _signInText,
-                  SizedBox(height: 46),
-                  BasicTextFormField(initialValue: 'email',),
-                  SizedBox(height: 40),
-                  BasicTextFormField(initialValue: '12345'),
-                  ElevatedButton(
-                    child: const Text('Sign in'),
-                    onPressed: () { // dodać walidację
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) => const RegisterView(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    SizedBox(height: 62),
+                    Image.asset(AppImages.logo),
+                    SizedBox(height: 21),
+                    _signInText,
+                    SizedBox(height: 46),
+
+                    // Pole do wpisywania email
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(hintText: 'Email'),
+                    ),
+                    SizedBox(height: 40),
+
+                    // Pole do wpisywania hasla
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(hintText: 'Password'),
+                    ),
+
+                    ElevatedButton(
+                      child: const Text('Sign in'),
+                      onPressed: () {
+                        print("Wpisany email: ${_emailController.text}");
+                        // dodać walidację
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (context) => const RegisterView(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
