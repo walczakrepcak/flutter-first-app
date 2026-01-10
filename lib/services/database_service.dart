@@ -57,4 +57,14 @@ class DatabaseService {
       );
     });
   }
+
+  // Opcja usuwania notatek
+  Future<void> deleteNote(int id) async {
+    final db = await database;
+    await db.delete(
+      'notes',
+      where: 'id = ?', // Usuwamy notatkę o konkretnym ID
+      whereArgs: [id],
+    );
+  }
 }

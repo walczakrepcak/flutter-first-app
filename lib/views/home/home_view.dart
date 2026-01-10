@@ -40,61 +40,60 @@ class _HomeViewState extends State<HomeView> {
     // Wyświetlenie systemowego okna dialogowego
     showDialog(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: const Text("Nowa notatka"),
-            // Zawartość okna ułożona w pionie
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              // Dopasowanie wysokości okna do zawartości
-              children: [
-                // Pole tekstowe dla tytułu
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(hintText: "Tytuł"),
-                ),
-                // Pole tekstowe dla treści
-                TextField(
-                  controller: contentController,
-                  decoration: const InputDecoration(hintText: "Treść"),
-                ),
-              ],
+      builder: (context) => AlertDialog(
+        title: const Text("Nowa notatka"),
+        // Zawartość okna ułożona w pionie
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          // Dopasowanie wysokości okna do zawartości
+          children: [
+            // Pole tekstowe dla tytułu
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(hintText: "Tytuł"),
             ),
-            // Przyciski akcji na dole okna
-            actions: [
-              // Przycisk rezygnacji - zamyka okno bez zapisu
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Anuluj"),
-              ),
-              // Przycisk zapisu - przesyła dane do bazy danych
-              ElevatedButton(
-                onPressed: () async {
-                  // Sprawdzenie, czy tytuł nie jest pusty przed zapisem
-                  if (titleController.text.isNotEmpty) {
-                    // Tworzenie nowego obiektu notatki na podstawie wpisanych danych
-                    final newNote = Note(
-                      title: titleController.text,
-                      content: contentController.text,
-                    );
-
-                    // Wywołanie usługi bazy danych do trwałego zapisu notatki
-                    await _dbService.insertNote(newNote);
-
-                    // Wywołanie odświeżenia listy na głównym ekranie
-                    _refreshNotes();
-
-                    // Sprawdzenie, czy kontekst widżetu jest nadal poprawny
-                    if (!mounted) return;
-
-                    // Zamknięcie okna dialogowego po zakończeniu operacji
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text("Zapisz"),
-              ),
-            ],
+            // Pole tekstowe dla treści
+            TextField(
+              controller: contentController,
+              decoration: const InputDecoration(hintText: "Treść"),
+            ),
+          ],
+        ),
+        // Przyciski akcji na dole okna
+        actions: [
+          // Przycisk rezygnacji, zamyka okno bez zapisu
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Anuluj"),
           ),
+          // Przycisk zapisu, przesyła dane do bazy danych
+          ElevatedButton(
+            onPressed: () async {
+              // Sprawdzenie, czy tytuł nie jest pusty przed zapisem
+              if (titleController.text.isNotEmpty) {
+                // Tworzenie nowego obiektu notatki na podstawie wpisanych danych
+                final newNote = Note(
+                  title: titleController.text,
+                  content: contentController.text,
+                );
+
+                // Wywołanie usługi bazy danych do trwałego zapisu notatki
+                await _dbService.insertNote(newNote);
+
+                // Wywołanie odświeżenia listy na głównym ekranie
+                _refreshNotes();
+
+                // Sprawdzenie, czy kontekst widżetu jest nadal poprawny
+                if (!mounted) return;
+
+                // Zamknięcie okna dialogowego po zakończeniu operacji
+                Navigator.pop(context);
+              }
+            },
+            child: const Text("Zapisz"),
+          ),
+        ],
+      ),
     );
   }
 
@@ -111,8 +110,7 @@ class _HomeViewState extends State<HomeView> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LoginView()),
-          (Route<
-          dynamic> route) => false, // Usunięcie wszystkich poprzednich tras
+      (Route<dynamic> route) => false, // Usunięcie wszystkich poprzednich tras
     );
   }
 
@@ -142,23 +140,45 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      // Główna zawartość ekranu - logika warunkowa wyświetlania danych
+      // Główna zawartość ekranu, logika warunkowa wyświetlania danych
       body: _notes.isEmpty
-      // Widok wyświetlany, gdy lista notatek pobrana z bazy SQLite jest pusta
+          // Widok wyświetlany, gdy lista notatek pobrana z bazy SQLite jest pusta
           ? const Center(child: Text("Brak notatek. Kliknij +, aby dodać."))
-      // Dynamiczne budowanie listy, gdy w bazie znajdują się dane
+          // Dynamiczne budowanie listy, gdy w bazie znajdują się dane
           : ListView.builder(
-        itemCount: _notes.length, // Określenie liczby elementów na liście
-        itemBuilder: (context, index) =>
-            ListTile(
-              // Ikona notatki po lewej stronie elementu listy
-              leading: const Icon(Icons.note, color: AppColors.purple),
-              title: Text(_notes[index].title),
-              // Wyświetlenie tytułu z modelu danych
-              subtitle: Text(
-                  _notes[index].content), // Wyświetlenie treści notatki
+              itemCount: _notes.length, // Określenie liczby elementów na liście
+              itemBuilder: (context, index) => ListTile(
+                // Ikona notatki umieszczona na początku elementu listy
+                leading: const Icon(Icons.note, color: AppColors.purple),
+
+                // Wyświetlenie tytułu notatki z aktualnego indeksu listy
+                title: Text(_notes[index].title),
+
+                // Wyświetlenie treści notatki pod tytułem
+                subtitle: Text(_notes[index].content),
+
+                // Element końcowy (po prawej stronie) - przycisk do usuwania
+                trailing: IconButton(
+                  // Ikona kosza w kolorze czerwonym dla odróżnienia funkcji destrukcyjnej
+                  icon: const Icon(Icons.delete, color: Colors.red),
+
+                  // Akcja po naciśnięciu ikony kosza
+                  onPressed: () async {
+                    // Pobranie unikalnego identyfikatora ID notatki z bazy
+                    final id = _notes[index].id;
+
+                    // Sprawdzenie, czy ID nie jest puste (null) przed próbą usunięcia
+                    if (id != null) {
+                      // Wywołanie asynchronicznej metody usuwania z serwisu bazy danych
+                      await _dbService.deleteNote(id);
+
+                      // Ponowne pobranie danych z bazy, aby odświeżyć interfejs użytkownika
+                      _refreshNotes();
+                    }
+                  },
+                ),
+              ),
             ),
-      ),
       // Przycisk akcji wiszący nad zawartością
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.white,
