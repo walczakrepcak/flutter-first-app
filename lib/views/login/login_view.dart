@@ -1,11 +1,10 @@
 import 'package:dsw59547/services/shared_prefs_service.dart';
 import 'package:dsw59547/utils/app_colors.dart';
 import 'package:dsw59547/utils/app_images.dart';
+import 'package:dsw59547/utils/app_styles.dart';
 import 'package:dsw59547/utils/app_texts.dart';
-import 'package:dsw59547/views/widgets/basic_text_form_field.dart';
-import 'package:flutter/material.dart';
-
 import 'package:dsw59547/views/home/home_view.dart';
+import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -39,16 +38,15 @@ class _LoginViewState extends State<LoginView> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    SizedBox(height: 62),
+                    const SizedBox(height: 62),
                     Image.asset(AppImages.logo),
-                    SizedBox(height: 21),
+                    const SizedBox(height: 21),
                     _signInText,
-                    SizedBox(height: 46),
+                    const SizedBox(height: 46),
 
                     // Pole do wpisywania email
                     TextFormField(
                       controller: _emailController,
-                      decoration: const InputDecoration(hintText: 'Email'),
                       // Walidacja danych
                       validator: (value) {
                         if (value == null ||
@@ -58,32 +56,64 @@ class _LoginViewState extends State<LoginView> {
                         }
                         return null; // Brak błędu
                       },
+
+                      decoration: InputDecoration(
+                        hintText: 'Email or User Name',
+                        // Użycie wspólnego stylu
+                        hintStyle: AppStyles.hintTextStyle,
+                        filled: true,
+                        fillColor: AppColors.white,
+                        prefixIcon: const Icon(
+                          Icons.person_outline,
+                          color: AppColors.purple,
+                        ),
+                        // Użycie wspólnej metody ramki z pliku AppStyles
+                        enabledBorder: AppStyles.inputBorderStyle(
+                          AppColors.lightPurple,
+                        ),
+                        focusedBorder: AppStyles.inputBorderStyle(
+                          AppColors.purple,
+                        ),
+                        errorBorder: AppStyles.inputBorderStyle(Colors.red),
+                        focusedErrorBorder: AppStyles.inputBorderStyle(
+                          Colors.red,
+                        ),
+                      ),
                     ),
 
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
-                    // Pole do wpisywania hasla
+                    // Pole do wpisywania hasła
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
                       decoration: const InputDecoration(hintText: 'Password'),
                     ),
 
+                    const SizedBox(height: 40),
+
+                    // Pole do wpisywania hasła
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(hintText: 'Password'),
+                    ),
+
+                    const SizedBox(height: 40),
+
                     // Przycisk logowania i jego funkcje
                     ElevatedButton(
                       child: const Text('Sign in'),
                       onPressed: () async {
-                        // Wywolanie walidacji formularza za pomoca klucza
+                        // Wywołanie walidacji formularza za pomocą klucza
                         if (_formKey.currentState!.validate()) {
-                          // Sprawdzenie czy dane są zgodne z tymi przypisanymi
+                          // Sprawdzanie czy dane są zgodne z tymi przypisami
                           if (_emailController.text == 'test@dsw.pl' &&
                               _passwordController.text == '12345') {
-                            // Jeżeli tak, to przejscie do Home (tymczasowo RegisterView)
+                            //Jeżeli tak, to przejście do Home
                             // Zapisanie sesji przed przejściem dalej
                             await SharedPrefsService.setLoggedIn(true);
-
                             if (!mounted) return;
-
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -91,7 +121,7 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             );
                           } else {
-                            // Jeżeli nie, to wyswietlenie komunikatu na dole
+                            // Jeżeli nie, to wyświetlenie komunikatu na dole
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Błędny email lub hasło!'),
@@ -113,7 +143,7 @@ class _LoginViewState extends State<LoginView> {
 }
 
 Widget get _signInText {
-  return Align(
+  return const Align(
     alignment: AlignmentGeometry.topLeft,
     child: Text(
       AppTexts.signIn,
