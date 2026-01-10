@@ -97,6 +97,60 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  // Funkcja wyświetlająca okno edycji istniejącej notatki
+  void _showEditNoteDialog(Note note) {
+    // Wypełnienie kontrolerów obecnymi danymi notatki
+    final titleController = TextEditingController(text: note.title);
+    final contentController = TextEditingController(text: note.content);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Edytuj notatkę"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(hintText: "Tytuł"),
+            ),
+            TextField(
+              controller: contentController,
+              decoration: const InputDecoration(hintText: "Treść"),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Anuluj"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (titleController.text.isNotEmpty) {
+                // Tworzenie obiektu z tym samym ID, ale nowymi tekstami
+                final updatedNote = Note(
+                  id: note.id, // Zachowanie oryginalnego ID jest kluczowe!
+                  title: titleController.text,
+                  content: contentController.text,
+                );
+
+                // Wywołanie aktualizacji w bazie danych
+                await _dbService.updateNote(updatedNote);
+
+                _refreshNotes(); // Odświeżenie listy na ekranie
+                if (!mounted) return;
+                Navigator.pop(context); // Zamknięcie okna
+              }
+            },
+            child: const Text("Zaktualizuj"),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   // Funkcja realizująca proces wylogowania użytkownika
   void _logout() async {
     // Zmiana statusu sesji w pamięci trwałej na "niezalogowany"
@@ -156,6 +210,12 @@ class _HomeViewState extends State<HomeView> {
 
                 // Wyświetlenie treści notatki pod tytułem
                 subtitle: Text(_notes[index].content),
+
+                // onTap umożliwia edycję notatki
+                onTap: (){
+                  // Przekazanie wybranej notatki do edycji
+                  _showEditNoteDialog(_notes[index]);
+                },
 
                 // Element końcowy (po prawej stronie) - przycisk do usuwania
                 trailing: IconButton(

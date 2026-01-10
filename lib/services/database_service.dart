@@ -36,9 +36,10 @@ class DatabaseService {
     final db = await database;
     // Zamiana obiektu Note na Mapę i zapis do bazy
     await db.insert(
-        'notes',
-        note.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace // W razie konfliktu zastępuje dane
+      'notes',
+      note.toMap(),
+      conflictAlgorithm:
+          ConflictAlgorithm.replace, // W razie konfliktu zastępuje dane
     );
   }
 
@@ -65,6 +66,19 @@ class DatabaseService {
       'notes',
       where: 'id = ?', // Usuwamy notatkę o konkretnym ID
       whereArgs: [id],
+    );
+  }
+
+  // Funkcja aktualizująca istniejącą notatkę w bazie danych
+  Future<void> updateNote(Note note) async {
+    final db = await database; // Pobieranie instancji bazy danych
+
+    // Wykonanie aktualizacji w tabeli 'notes'
+    await db.update(
+      'notes',
+      note.toMap(), // Przekazanie nowych danych w formie Mapy
+      where: 'id = ?', // Warunek: znajdź notatkę o konkretnym ID
+      whereArgs: [note.id],
     );
   }
 }
