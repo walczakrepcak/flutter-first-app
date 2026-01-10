@@ -5,7 +5,7 @@ import 'package:dsw59547/utils/app_texts.dart';
 import 'package:dsw59547/views/widgets/basic_text_form_field.dart';
 import 'package:flutter/material.dart';
 
-import '../register/register_view.dart';
+import 'package:dsw59547/views/home/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -87,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const RegisterView(),
+                                builder: (context) => const HomeView(),
                               ),
                             );
                           } else {

@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
+  path: ^1.9.0
   very_good_analysis: 10.0.0
 
 dev_dependencies:
