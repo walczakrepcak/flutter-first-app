@@ -17,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false; // Domyślnie hasło jest ukryte
 
   @override
   void dispose() {
@@ -63,9 +64,13 @@ class _LoginViewState extends State<LoginView> {
                         hintStyle: AppStyles.hintTextStyle,
                         filled: true,
                         fillColor: AppColors.white,
-                        prefixIcon: const Icon(
-                          Icons.person_outline,
-                          color: AppColors.purple,
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Image.asset(
+                            AppImages.user,
+                            width: 20,
+                            height: 20,
+                          ),
                         ),
                         // Użycie wspólnej metody ramki z pliku AppStyles
                         enabledBorder: AppStyles.inputBorderStyle(
@@ -86,17 +91,50 @@ class _LoginViewState extends State<LoginView> {
                     // Pole do wpisywania hasła
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(hintText: 'Password'),
-                    ),
-
-                    const SizedBox(height: 40),
-
-                    // Pole do wpisywania hasła
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(hintText: 'Password'),
+                      // Użyto zmiennej do ukrywania i wyświetlania hasła
+                      obscureText: !_isPasswordVisible,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: AppStyles.hintTextStyle,
+                        filled: true,
+                        fillColor: AppColors.white,
+                        // Ikona kłódki z assetów
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Image.asset(
+                            AppImages.password,
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                        // Ikona oka po prawej stronie z funkcją klikania
+                        suffixIcon: GestureDetector(
+                          onTap: (){
+                            // Zmieniamy stan na przeciwny i odświeżamy widok
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Image.asset(AppImages.eye, width: 20, height: 20,
+                            // Zmiana koloru ikony gdy hasło jest widoczne
+                            color: _isPasswordVisible ? AppColors.purple : Colors.grey,
+                            ),
+                          ),
+                        ),
+                        // Użycie wspólnej metody ramki z pliku AppStyles
+                        enabledBorder: AppStyles.inputBorderStyle(
+                          AppColors.lightPurple,
+                        ),
+                        focusedBorder: AppStyles.inputBorderStyle(
+                          AppColors.purple,
+                        ),
+                        errorBorder: AppStyles.inputBorderStyle(Colors.red),
+                        focusedErrorBorder: AppStyles.inputBorderStyle(
+                          Colors.red,
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 40),
