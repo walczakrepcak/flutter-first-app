@@ -34,6 +34,14 @@ class AppStyles {
     color: AppColors.purple,
   );
 
+  // Styl napisu Back - Font: Inter, Regular (400), 12px
+  static const TextStyle backTextStyle = TextStyle(
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: AppColors.purple,
+  );
+
   // Styl tekstu "Don't have account?" - Font: Inter, Regular (400), 15px
   static const TextStyle smallTextStyle = TextStyle(
     fontFamily: 'Inter',

@@ -4,6 +4,7 @@ import 'package:dsw59547/utils/app_images.dart';
 import 'package:dsw59547/utils/app_styles.dart';
 import 'package:dsw59547/utils/app_texts.dart';
 import 'package:dsw59547/views/home/home_view.dart';
+import 'package:dsw59547/views/register/register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
@@ -218,8 +219,10 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Tu za chwilę dodamy nawigację do RegisterView
-                            print("Przejście do rejestracji");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RegisterView()),
+                            );
                           },
                           child: const Text(
                             "Sign Up",
