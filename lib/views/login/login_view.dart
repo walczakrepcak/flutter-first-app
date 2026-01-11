@@ -109,7 +109,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         // Ikona oka po prawej stronie z funkcją klikania
                         suffixIcon: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             // Zmieniamy stan na przeciwny i odświeżamy widok
                             setState(() {
                               _isPasswordVisible = !_isPasswordVisible;
@@ -117,9 +117,14 @@ class _LoginViewState extends State<LoginView> {
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(12),
-                            child: Image.asset(AppImages.eye, width: 20, height: 20,
-                            // Zmiana koloru ikony gdy hasło jest widoczne
-                            color: _isPasswordVisible ? AppColors.purple : Colors.grey,
+                            child: Image.asset(
+                              AppImages.eye,
+                              width: 20,
+                              height: 20,
+                              // Zmiana koloru ikony gdy hasło jest widoczne
+                              color: _isPasswordVisible
+                                  ? AppColors.purple
+                                  : Colors.grey,
                             ),
                           ),
                         ),
@@ -139,35 +144,75 @@ class _LoginViewState extends State<LoginView> {
 
                     const SizedBox(height: 40),
 
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          print("Kliknięto Forget Password");
+                        },
+                        child: const Text(
+                          'Forget Password?',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: AppColors.purple,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+
                     // Przycisk logowania i jego funkcje
-                    ElevatedButton(
-                      child: const Text('Sign in'),
-                      onPressed: () async {
-                        // Wywołanie walidacji formularza za pomocą klucza
-                        if (_formKey.currentState!.validate()) {
-                          // Sprawdzanie czy dane są zgodne z tymi przypisami
-                          if (_emailController.text == 'test@dsw.pl' &&
-                              _passwordController.text == '12345') {
-                            //Jeżeli tak, to przejście do Home
-                            // Zapisanie sesji przed przejściem dalej
-                            await SharedPrefsService.setLoggedIn(true);
-                            if (!mounted) return;
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeView(),
-                              ),
-                            );
-                          } else {
-                            // Jeżeli nie, to wyświetlenie komunikatu na dole
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Błędny email lub hasło!'),
-                              ),
-                            );
+                    SizedBox(
+                      // Rozciąga przycisk od lewej do prawej (z uwzględnieniem Paddingu 20px w Form)
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.buttonPurple,
+                          foregroundColor: AppColors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: () async {
+                          // Wywołanie walidacji formularza za pomocą klucza
+                          if (_formKey.currentState!.validate()) {
+                            // Sprawdzanie czy dane są zgodne z tymi przypisami
+                            if (_emailController.text == 'test@dsw.pl' &&
+                                _passwordController.text == '12345') {
+                              //Jeżeli tak, to przejście do Home
+                              // Zapisanie sesji przed przejściem dalej
+                              await SharedPrefsService.setLoggedIn(true);
+                              if (!mounted) return;
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeView(),
+                                ),
+                              );
+                            } else {
+                              // Jeżeli nie, to wyświetlenie komunikatu na dole
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Błędny email lub hasło!'),
+                                ),
+                              );
+                            }
                           }
-                        }
-                      },
+                        },
+                        child: const Text(
+                          'Sign in',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
