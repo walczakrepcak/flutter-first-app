@@ -5,6 +5,7 @@ import 'package:dsw59547/utils/app_styles.dart';
 import 'package:dsw59547/utils/app_texts.dart';
 import 'package:dsw59547/views/home/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -152,12 +153,7 @@ class _LoginViewState extends State<LoginView> {
                         },
                         child: const Text(
                           'Forget Password?',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                            color: AppColors.purple,
-                          ),
+                          style: AppStyles.buttonTextStylePP,
                         ),
                       ),
                     ),
@@ -206,13 +202,31 @@ class _LoginViewState extends State<LoginView> {
                         },
                         child: const Text(
                           'Sign in',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                          ),
+                          style: AppStyles.buttonTextStyleWH,
                         ),
                       ),
+                    ),
+
+                    const SizedBox(height: 40), // Odstęp 40px od przycisku Sign in
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center, // Wyśrodkowanie napisu
+                      children: [
+                        const Text(
+                          "Don't have account? ",
+                          style: AppStyles.smallTextStyle,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            // Tu za chwilę dodamy nawigację do RegisterView
+                            print("Przejście do rejestracji");
+                          },
+                          child: const Text(
+                            "Sign Up",
+                            style: AppStyles.buttonTextStylePP,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -227,14 +241,10 @@ class _LoginViewState extends State<LoginView> {
 
 Widget get _signInText {
   return const Align(
-    alignment: AlignmentGeometry.topLeft,
+    alignment: Alignment.topLeft,
     child: Text(
       AppTexts.signIn,
-      style: TextStyle(
-        fontSize: 30,
-        fontWeight: FontWeight.w700,
-        color: AppColors.purple,
-      ),
+      style: AppStyles.titleStyle,
     ),
   );
 }
